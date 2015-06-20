@@ -15,15 +15,61 @@ function InstallUpdates {
 function InstallVMWareTools {
     echo Installing VMWare Tools
     echo    Extracting VMware Tools
-    #tar -xvzf /media/mshea/VMware\ Tools/VMwareTools-9.9.3-2759765.tar.gz -C /home/mshea/Downloads/
+    tar -xvzf /media/mshea/VMware\ Tools/VMwareTools-9.9.3-2759765.tar.gz -C /home/mshea/Downloads/
 
     echo Installing VMWare Tools
-    #/home/mshea/Downloads/vmware-tools-distrib/vmware-install.pl -d
+    /home/mshea/Downloads/vmware-tools-distrib/vmware-install.pl -d
 
     echo clean up VMWare Folder
-    #rm -rf /home/mshea/Downloads/vmware-tools-distrib
+    rm -rf /home/mshea/Downloads/vmware-tools-distrib
 }
 
+function InstallChrome {
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    dpkg -i google-chrome-stable_current_amd64.deb
+    apt-get -f install -y
+    rm google-chrome-stable_current_amd64.deb
+}
+
+function InstallSublime {
+    wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-3083_amd64.deb
+    dpkg -i sublime-text_build-3083_amd64.deb
+    apt-get -f install -y
+    rm sublime-text_build-3083_amd64.deb
+}
+
+function InstallAtom {
+    wget https://atom.io/download/deb
+    mv deb atom-amd64.deb
+    dpkg -i atom-amd64.deb
+    apt-get -f install -y
+    rm atom-amd64.deb
+}
+
+function InstallOracleJava8 {
+    echo debconf shared/accepted-oracle-license-v1-1 select true | \
+        debconf-set-selections
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | \
+        debconf-set-selections
+    add-apt-repository -y ppa:webupd8team/java
+    apt-get update
+    apt-get install -y oracle-java8-installer
+}
+
+function InstallDocker {
+    wget -qO- https://get.docker.com/ | sh
+    result=$(tempfile) ; chmod go-rw $result
+    whiptail --inputbox "What is your username?" 10 30 2>$result
+    usermod -aG docker $(cat $result)
+}
+
+function InstallWebStorm {
+    wget http://download-cf.jetbrains.com/webstorm/WebStorm-10.0.4.tar.gz
+    tar -xvzf WebStorm-10.0.4.tar.gz -C /opt/
+    mv /opt/WebStorm* /opt/webstorm
+    ln -s /opt/webstorm/bin/webstorm.sh /usr/bin/webstorm
+    rm WebStorm-10.0.4.tar.gz
+}
 
 DIALOG=${DIALOG=dialog}
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
@@ -73,6 +119,7 @@ do
             ;;
         "VMWare_Tools")
             echo "X-VMWare Tools"
+            InstallVMWareTools
             ;;
         "Terminator")
             echo "Install Terminator"
@@ -80,14 +127,15 @@ do
             ;;
         "Chrome")
             echo "X-Chrome"
-            dpkg -i /home/mshea/Downloads/google-chrome-stable_current_i386.deb
-            apt-get -f install
+            InstallChrome
             ;;
         "Sublime")
             echo "X-Sublime"
+            InstallSublime
             ;;
         "Atom")
             echo "X-Atom"
+            InstallAtom
             ;;
         "Git")
             echo "Install Git"
@@ -99,6 +147,7 @@ do
             ;;
         "Oracle_Java_8")
             echo "X-Oracle_Java_8"
+            InstallOracleJava8
             ;;
         "Eclipse")
             echo "X-Eclipse"
@@ -110,9 +159,11 @@ do
             ;;
         "WebStorm")
             echo "X-WebStorm"
+            InstallWebStorm
             ;;
         "Docker")
             echo "X-Docker"
+            InstallDocker
             ;;
     esac
 done
