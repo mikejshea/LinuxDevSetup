@@ -90,6 +90,15 @@ function CheckVMWareToolsVersion()
         echo "Not Installed"
     fi
 }
+function CheckEclipseVersion()
+{
+    if [ ! -z "$(which eclipse)" ];
+    then
+        echo "Installed"
+    else 
+        echo "Not Installed"
+    fi
+}
 
 function CheckWebstormVersion()
 {
@@ -100,6 +109,16 @@ function CheckWebstormVersion()
         echo "Not Installed"
     fi
 }
+function CheckOpenVPNVersion()
+{
+    if [ ! -z "$(which webstorm)" ];
+    then
+        echo "Installed"
+    else 
+        echo "Not Installed"
+    fi
+}
+
 function InstallUpdates {
     echo Start Updates
     apt-get update
@@ -126,6 +145,33 @@ function InstallChrome {
     rm google-chrome-stable_current_amd64.deb
 }
 
+function InstallEclipse {
+    ECLIPSE="eclipse-java-luna-SR2-linux-gtk-x86_64.tar.gz"
+    ECLIPSEDESKTOP=/usr/share/applications/eclipse.desktop
+    wget http://mirror.cc.vt.edu/pub/eclipse/technology/epp/downloads/release/luna/SR2/$ECLIPSE
+    tar -xvzf $ECLIPSE -C /opt/
+    ln -s /opt/eclipse/eclipse /usr/bin/eclipse
+    rm $ECLIPSE
+
+    echo "[Desktop Entry]" > $ECLIPSEDESKTOP
+    echo "Name=Eclipse 4" >> $ECLIPSEDESKTOP
+    echo "Type=Application" >> $ECLIPSEDESKTOP
+    echo "Exec=/opt/eclipse/eclipse" >> $ECLIPSEDESKTOP
+    echo "Terminal=false" >> $ECLIPSEDESKTOP
+    echo "Icon=/opt/eclipse/icon.xpm" >> $ECLIPSEDESKTOP
+    echo "Comment=Integrated Development Environment" >> $ECLIPSEDESKTOP
+    echo "NoDisplay=false" >> $ECLIPSEDESKTOP
+    echo "Categories=Development;IDE;" >> $ECLIPSEDESKTOP
+    echo "Name[en]=Eclipse" >> $ECLIPSEDESKTOP
+
+}
+
+function InstallOpenVPN()
+{
+    apt-get install -y openvpn
+    apt-get install -y network-manager-openvpn
+    restart network-manager 
+}
 function InstallSublime {
     wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-3083_amd64.deb
     dpkg -i sublime-text_build-3083_amd64.deb
@@ -172,7 +218,7 @@ trap "rm -f $tempfile" 0 1 2 5 15
 
 $DIALOG --backtitle "Check what you would like installed" \
 	--title "Developer Setup" --clear \
-        --checklist "Hi, you can select your favorite singer here  " 20 61 13 \
+        --checklist "Hi, you can select your favorite singer here  " 24 61 16 \
          "General_Updates" "" off \
          "VMWare_Tools" "$(CheckVMWareToolsVersion)" off \
          "Terminator" "$(CheckTerminatorVersion)" off \
@@ -182,10 +228,11 @@ $DIALOG --backtitle "Check what you would like installed" \
          "Git" "$(CheckGitVersion)" off \
          "Maven" "" off \
          "Oracle_Java_8" "" off \
-         "Eclipse" "" off \
+         "Eclipse" "$(CheckEclipseVersion)" off \
          "NodeJS" "$(CheckNodeJSVersion)" off \
          "WebStorm" "$(CheckWebstormVersion)" off \
          "Docker" "$(CheckDockerVersion)" off \
+         "OpenVPN" "$(CheckOpenVPNVersion)" off \
          2> $tempfile
 
 retval=$?
@@ -246,6 +293,7 @@ do
             ;;
         "Eclipse")
             echo "X-Eclipse"
+            InstallEclipse
             ;;
         "NodeJS")
             echo "Install NodeJS"
@@ -259,6 +307,11 @@ do
         "Docker")
             echo "X-Docker"
             InstallDocker
+            ;;
+
+        "OpenVPN")
+            echo "X-OpenVPN"
+            InstallOpenVPN
             ;;
     esac
 done
