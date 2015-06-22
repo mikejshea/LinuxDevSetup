@@ -5,6 +5,101 @@ then
     exit
 fi
 
+function CheckGitVersion()
+{
+    if [ ! -z "$(which git)" ];
+    then
+        echo "$(git --version)"
+    else 
+        echo "Not Installed"
+    fi
+} 
+
+function CheckAtomVersion()
+{
+    if [ ! -z "$(which atom)" ];
+    then
+        echo "$(atom --version)"
+    else 
+        echo "Not Installed"
+    fi
+} 
+function CheckChromeVersion()
+{
+    if [ ! -z "$(which google-chrome)" ];
+    then
+        echo "$(google-chrome --version)"
+    else 
+        echo "Not Installed"
+    fi
+} 
+function CheckTerminatorVersion()
+{
+    if [ ! -z "$(which terminator)" ];
+    then
+        echo "$(terminator -v 2> /dev/null)"
+    else 
+        echo "Not Installed"
+    fi
+}
+
+function CheckAtomVersion()
+{
+    if [ ! -z "$(which atom)" ];
+    then
+        echo "$(atom --version)"
+    else 
+        echo "Not Installed"
+    fi
+}
+
+function CheckNodeJSVersion()
+{
+    if [ ! -z "$(which nodejs)" ];
+    then
+        echo "$(nodejs --version)"
+    else 
+        echo "Not Installed"
+    fi
+}
+
+function CheckDockerVersion()
+{
+    if [ ! -z "$(which docker)" ];
+    then
+        echo "$(docker --version)"
+    else 
+        echo "Not Installed"
+    fi
+}
+function CheckSublimeVersion()
+{
+    if [ ! -z "$(which /opt/sublime_text/sublime_text)" ];
+    then
+        echo "$(/opt/sublime_text/sublime_text --version)"
+    else 
+        echo "Not Installed"
+    fi
+}
+function CheckVMWareToolsVersion()
+{
+    if [ ! -z "$(which vmware-toolbox-cmd)" ];
+    then
+        echo "$(vmware-toolbox-cmd -v)"
+    else 
+        echo "Not Installed"
+    fi
+}
+
+function CheckWebstormVersion()
+{
+    if [ ! -z "$(which webstorm)" ];
+    then
+        echo "Installed"
+    else 
+        echo "Not Installed"
+    fi
+}
 function InstallUpdates {
     echo Start Updates
     apt-get update
@@ -78,19 +173,19 @@ trap "rm -f $tempfile" 0 1 2 5 15
 $DIALOG --backtitle "Check what you would like installed" \
 	--title "Developer Setup" --clear \
         --checklist "Hi, you can select your favorite singer here  " 20 61 13 \
-         "General_Updates" "General Updates" off \
-         "VMWare_Tools" "VMWare Tools" off \
-         "Terminator" "Terminator" off \
-         "Chrome" "Chrome" off \
-         "Sublime" "Sublime" off \
-         "Atom" "Atom" off \
-         "Git" "Git" off \
-         "Maven" "Maven" off \
-         "Oracle_Java_8" "Oracle Java 8" off \
-         "Eclipse" "Eclipse" off \
-         "NodeJS" "NodeJS" off \
-         "WebStorm" "WebStorm" off \
-         "Docker" "Docker" off \
+         "General_Updates" "" off \
+         "VMWare_Tools" "$(CheckVMWareToolsVersion)" off \
+         "Terminator" "$(CheckTerminatorVersion)" off \
+         "Chrome" "$(CheckChromeVersion)" off \
+         "Sublime" "$(CheckSublimeVersion)" off \
+         "Atom" "$(CheckAtomVersion)" off \
+         "Git" "$(CheckGitVersion)" off \
+         "Maven" "" off \
+         "Oracle_Java_8" "" off \
+         "Eclipse" "" off \
+         "NodeJS" "$(CheckNodeJSVersion)" off \
+         "WebStorm" "$(CheckWebstormVersion)" off \
+         "Docker" "$(CheckDockerVersion)" off \
          2> $tempfile
 
 retval=$?
