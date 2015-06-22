@@ -1,6 +1,7 @@
 # UbuntuDevSetup
 
 After logging into your new Ubuntu VM, open a terminal window. Then follow the steps below. 
+
 ** only check Install VMWare Tools in VMWare Workstation. You must mount the drive first using the "Install VMWare Tools menu option. **
 
 ```
