@@ -257,7 +257,7 @@ do
     case $choice in
         "General_Updates")
             echo "X-General Updates"
-            InstallUpdate
+            InstallUpdates 
             ;;
         "VMWare_Tools")
             echo "X-VMWare Tools"
