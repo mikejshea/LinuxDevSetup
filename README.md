@@ -18,5 +18,10 @@ sudo bash
 ```
 You can run UbuntuDevSetup.sh a second time to check install and versions.
 
+You will need to run Webstorm and IntelliJ for the first time from a terminal prompt. You should execute these commands as your user not root. 
 
-> Written with [StackEdit](https://stackedit.io/).
+To launch WebStorm type:
+`webstorm`
+
+To launch IntelliJ type:
+`idea`
