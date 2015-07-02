@@ -212,6 +212,14 @@ function InstallWebStorm {
     rm WebStorm-10.0.4.tar.gz
 }
 
+function InstallIntelliJ {
+    wget https://d1opms6zj7jotq.cloudfront.net/idea/ideaIU-14.1.4.tar.gz
+    tar -xvzf ideaIU-14.1.4.tar.gz -C /opt/
+    mv /opt/idea-IU-141.1532.4 /opt/ideaIU
+    ln -s /opt/ideaIU/bin/idea.sh /usr/bin/idea
+    rm ideaIU-14.1.4.tar.gz
+}
+
 DIALOG=${DIALOG=dialog}
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
@@ -233,6 +241,7 @@ $DIALOG --backtitle "Check what you would like installed" \
          "WebStorm" "$(CheckWebstormVersion)" off \
          "Docker" "$(CheckDockerVersion)" off \
          "OpenVPN" "$(CheckOpenVPNVersion)" off \
+         "Intellij" "" off \
          2> $tempfile
 
 retval=$?
@@ -308,10 +317,13 @@ do
             echo "X-Docker"
             InstallDocker
             ;;
-
         "OpenVPN")
             echo "X-OpenVPN"
             InstallOpenVPN
+            ;;
+        "Intellij")
+            echo "X-Intellij"
+            InstallIntelliJ
             ;;
     esac
 done
