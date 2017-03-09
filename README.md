@@ -11,7 +11,7 @@ cd InstallScripts
 ```
 ## For Ubuntu
 ```
-wget https://github.com/mikejshea/UbuntuDevSetup/raw/master/UbuntuDevSetup.sh
+wget https://github.com/mikejshea/LinuxDevSetup/raw/master/UbuntuDevSetup.sh
 chmod 755 UbuntuDevSetup.sh
 
 sudo bash
@@ -19,11 +19,11 @@ sudo bash
 ```
 ## For CentOs7
 ```
-wget https://github.com/mikejshea/UbuntuDevSetup/raw/master/CentoOs7Setup.sh
-chmod 755 CentoOs7Setup.sh
+wget https://github.com/mikejshea/LinuxDevSetup/raw/master/CentOs7Setup.sh
+chmod 755 CentOs7Setup.sh
 
 sudo bash
-./CentoOs7Setup.sh
+./CentOs7Setup.sh
 ```
 
 You can run \*Setup.sh a second time to check install and versions.
