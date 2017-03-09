@@ -80,6 +80,16 @@ function CheckTerminatorVersion()
     fi
 }
 
+function CheckAnsibleVersion()
+{
+    if [ ! -z "$(which ansible)" ];
+    then
+        echo "$(ansible --version)"
+    else
+        echo "Not Installed"
+    fi
+}
+
 function CheckAtomVersion()
 {
     if [ ! -z "$(which atom)" ];
@@ -193,9 +203,17 @@ function InstallUpdates {
     echo Finished Updates
 }
 
+function InstallAnsible {
+    echo Start Ansible
+    yum -y install ansible
+    echo Finished Ansible
+}
+
+
 function InstallVMWareTools {
     echo Installing VMWare Tools
     echo    Extracting VMware Tools
+
     tar -xvzf /run/media/gpddev/VMware\ Tools/VMwareTools-*.tar.gz -C /home/$SUDO_USER/Downloads/
 
     echo Installing VMWare Tools
@@ -370,6 +388,7 @@ $DIALOG --backtitle "Check what you would like installed" \
          "Extra_Packages_for_Ent_Linux" "" off \
          "VMWare_Tools" "$(CheckVMWareToolsVersion)" off \
          "Terminator" "$(CheckTerminatorVersion)" off \
+         "Ansible" "$(CheckAnsibleVersion)" off \
          "Chrome" "$(CheckChromeVersion)" off \
          "Sublime" "$(CheckSublimeVersion)" off \
          "Atom" "$(CheckAtomVersion)" off \
@@ -409,9 +428,9 @@ do
             echo "X-General Updates"
             InstallUpdates
             ;;
-	"Extra_Packages_for_Ent_Linux")
-	    echo "Extra Packages for Enterprise Linux"
-	    yum install -y epel-release
+	      "Extra_Packages_for_Ent_Linux")
+	          echo "Extra Packages for Enterprise Linux"
+	          yum install -y epel-release
             ;;
         "VMWare_Tools")
             echo "X-VMWare Tools"
@@ -420,6 +439,10 @@ do
         "Terminator")
             echo "Install Terminator"
             yum -y install terminator
+            ;;
+        "Ansible")
+            echo "Install Ansible"
+            InstallAnsible
             ;;
         "Chrome")
             echo "X-Chrome"
