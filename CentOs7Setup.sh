@@ -44,7 +44,7 @@ function CheckGitVersion()
 
 function CheckJavaVersion()
 {
-    if [ ! -z "$(which atom)" ];
+    if [ ! -z "$(which java)" ];
     then
         echo "$(java -version 2>&1 | awk -F ' ' '/version/ {print $1 " " $3}' | sed 's/"//g')"
     else
