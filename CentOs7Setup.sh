@@ -189,8 +189,7 @@ function CheckOpenVPNVersion()
 
 function InstallUpdates {
     echo Start Updates
-    apt-get update
-    apt-get upgrade -y
+    yum -y upgrade
     echo Finished Updates
 }
 
