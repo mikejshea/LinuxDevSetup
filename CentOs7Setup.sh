@@ -196,13 +196,13 @@ function InstallUpdates {
 function InstallVMWareTools {
     echo Installing VMWare Tools
     echo    Extracting VMware Tools
-    tar -xvzf /media/mshea/VMware\ Tools/VMwareTools-9.9.3-2759765.tar.gz -C /home/mshea/Downloads/
+    tar -xvzf /run/media/gpddev/VMware\ Tools/VMwareTools-*.tar.gz -C /home/$SUDO_USER/Downloads/
 
     echo Installing VMWare Tools
-    /home/mshea/Downloads/vmware-tools-distrib/vmware-install.pl -d
+    /home/$SUDO_USER/Downloads/vmware-tools-distrib/vmware-install.pl -d
 
     echo clean up VMWare Folder
-    rm -rf /home/mshea/Downloads/vmware-tools-distrib
+    rm -rf /home/$SUDO_USER/Downloads/vmware-tools-distrib
 }
 
 function InstallChrome {
