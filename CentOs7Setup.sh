@@ -214,7 +214,7 @@ function InstallVMWareTools {
     echo Installing VMWare Tools
     echo    Extracting VMware Tools
 
-    tar -xvzf /run/media/gpddev/VMware\ Tools/VMwareTools-*.tar.gz -C /home/$SUDO_USER/Downloads/
+    tar -xvzf /run/media/$SUDO_USER/VMware\ Tools/VMwareTools-*.tar.gz -C /home/$SUDO_USER/Downloads/
 
     echo Installing VMWare Tools
     /home/$SUDO_USER/Downloads/vmware-tools-distrib/vmware-install.pl -d
@@ -370,11 +370,11 @@ function InstallYarn {
 }
 
 function InstallIntelliJ {
-    wget https://d1opms6zj7jotq.cloudfront.net/idea/ideaIU-14.1.4.tar.gz
-    tar -xvzf ideaIU-14.1.4.tar.gz -C /opt/
-    mv /opt/idea-IU-141.1532.4 /opt/ideaIU
+    wget $INTELLIJ_INSTALLER
+    tar -xvzf ideaIU-*.tar.gz -C /opt/
+    mv /opt/idea-* /opt/ideaIU
     ln -s /opt/ideaIU/bin/idea.sh /usr/bin/idea
-    rm ideaIU-14.1.4.tar.gz
+    rm ideaIU-*.tar.gz
 }
 
 DIALOG=${DIALOG=dialog}
