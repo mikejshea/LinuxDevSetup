@@ -1,0 +1,13 @@
+systemLog:
+  destination: file
+  path: "/data/db/mdb.log"
+  logRotate: rename
+  logAppend: true
+storage:
+  dbPath: "/data/db/gpd"
+  journal:
+    enabled: true
+net:
+  port: 27017
+setParameter:
+  enableLocalhostAuthBypass: false

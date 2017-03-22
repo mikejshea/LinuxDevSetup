@@ -1,0 +1,43 @@
+---
+# The playbook creates a new database test and populates data in the database to test the sharding.
+
+- hosts: atlanta-mdbservers
+  remote_user: root
+  tasks:
+
+    - name: Add mongo repos
+      copy:
+        src: ./templates/mongodb-org-3.4.repo
+        dest: /etc/yum.repos.d/mongodb-org-3.4.repo
+        owner: root
+        mode: 0644
+
+    - name: Install mongodb-org
+      yum:
+        name: mongodb-org
+        state: latest
+
+    - name: Copy mongo config files
+      copy:
+        src: ./templates/mongo_config.txt
+        dest: /etc/mongod.conf
+        owner: mongod
+        mode: 0644
+
+    - name: Create db path
+      file:
+        path: /data/db/
+        state: directory
+        owner: mongod
+
+    - name: Create gpd db path
+      file:
+        path: /data/db/gpd/
+        state: directory
+        owner: mongod
+
+    - name: Start mongod as service
+      service:
+        name: mongod
+        state: started
+        enabled: yes

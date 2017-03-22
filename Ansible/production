@@ -1,0 +1,9 @@
+[all:vars]
+ansible_connection=ssh
+ansible_ssh_user=root
+ansible_ssh_pass=gpddev
+
+[atlanta-mdbservers]
+192.168.162.101
+192.168.162.102
+192.168.162.103
