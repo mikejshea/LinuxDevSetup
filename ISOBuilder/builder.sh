@@ -16,7 +16,7 @@ cp -R /mnt/dvd/Packages/ ~/kickstart_build/isolinux/Packages/
 
 yum -y install createrepo
 cd ~/kickstart_build/isolinux
-createrepo -g ~/kickstart_build/comps.xml .
+createrepo -g ~/kickstart_build/isolinux/comps.xml .
 
 cd ~/kickstart_build
 mkisofs -o ~/centos7.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -J -v -V "CentOS 7 x86_64" -T isolinux/. .
