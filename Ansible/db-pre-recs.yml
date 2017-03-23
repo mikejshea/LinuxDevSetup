@@ -23,6 +23,25 @@
         name: policycoreutils-python
         state: latest
 
+    - name: Format Drive with XFS
+      filesystem:
+        fstype: xfs
+        dev: /dev/sdb
+
+    - name: Create db path
+      file:
+        path: /data/mongodb/
+        state: directory
+
+    - name: Mount data drive
+      mount:
+        name: /data/mongodb
+        src: /dev/sdb
+        fstype: xfs
+        opts: noatime
+        state: present
+        boot: yes
+
     - name: Reboot server
       shell: shutdown -r +1
       async: 0

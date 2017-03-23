@@ -1,13 +1,18 @@
 systemLog:
   destination: file
-  path: "/data/db/mdb.log"
+  path: "/data/mongodb/mdb-gpd.log"
   logRotate: rename
   logAppend: true
 storage:
-  dbPath: "/data/db/gpd"
+  dbPath: "/data/mongodb/gpd"
   journal:
     enabled: true
 net:
   port: 27017
+
+replication:
+  replSetName: gpd
+
+
 setParameter:
   enableLocalhostAuthBypass: false

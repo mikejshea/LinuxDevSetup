@@ -1,21 +1,35 @@
-echo "Stopping VMs..."
+#!/bin/bash
+WAIT_TIME=10
+
+if [ "$1" == "" ]; then
+    echo "Must include snapshot name."
+    exit
+fi
+
+if [ "$2" != "" ]; then
+  WAIT_TIME=$2
+fi
+
+SNAPSHOT=$1
+
+echo Stopping VMs...
 vmrun stop "/mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx"
 vmrun stop "/mnt/md0/vms/gpd-mdb-2/gpd-mdb-2.vmx"
 vmrun stop "/mnt/md0/vms/gpd-mdb-3/gpd-mdb-3.vmx"
 echo "VMs Stopped"
-sleep 10
+sleep $WAIT_TIME
 
-echo "Reverting to snapshot: Base..."
-vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx base
-vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-2/gpd-mdb-2.vmx base
-vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx base
-echo "Base Snapshot restored"
+echo Reverting to snapshot: $SNAPSHOT ...
+vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx $SNAPSHOT
+vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-2/gpd-mdb-2.vmx $SNAPSHOT
+vmrun -T ws revertToSnapshot /mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx $SNAPSHOT
+echo $SNAPSHOT Snapshot restored
 
-sleep 10
-echo "Start VMs..."
+sleep $WAIT_TIME
+echo Start VMs...
 vmrun -T ws start /mnt/md0/vms/gpd-mdb-1/gpd-mdb-1.vmx
 vmrun -T ws start /mnt/md0/vms/gpd-mdb-2/gpd-mdb-2.vmx
 vmrun -T ws start /mnt/md0/vms/gpd-mdb-3/gpd-mdb-3.vmx
-echo "VMs Started"
+echo VMs Started
 
-echo "Done"
+echo Done

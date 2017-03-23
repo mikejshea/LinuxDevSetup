@@ -24,15 +24,15 @@
         owner: mongod
         mode: 0644
 
-    - name: Create db path
+    - name: Set db path owner
       file:
-        path: /data/db/
+        path: /data/mongodb/
         state: directory
         owner: mongod
 
     - name: Create gpd db path
       file:
-        path: /data/db/gpd/
+        path: /data/mongodb/gpd/
         state: directory
         owner: mongod
 
