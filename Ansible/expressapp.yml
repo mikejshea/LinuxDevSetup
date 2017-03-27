@@ -38,10 +38,3 @@
         name: nginx
         state: restarted
         enabled: yes
-
-    - name: start nodejs
-      shell: node app.js
-      args:
-        chdir: ~/express/ip_app/
-      async: 1
-      poll: 0

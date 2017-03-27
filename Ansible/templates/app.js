@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
       } else {
         // this interface has only one ipv4 adress
         console.log('2:' + ifname, iface.address);
-        res.status(200).send(ifname + ': ' + iface.address);
+        res.status(200).send('{ifname:"' + ifname + '", addr:"' + iface.address + '", PID: "' + process.pid + '"}');
       }
       ++alias;
     });

@@ -1,0 +1,29 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-appservers
+  remote_user: root
+  tasks:
+
+    - name: npm install pm2
+      npm:
+        name: pm2
+        version: latest
+        global: yes
+
+    - name: copy config files
+      copy:
+        src: ./templates/pm2_process.yml
+        dest: ~/express/ip_app/process.yml
+        owner: root
+        mode: 0644
+
+    - name: start pm2
+      shell: pm2 start process.yml
+      args:
+        chdir: ~/express/ip_app/
+
+    - name: set pm2 to start on bot
+      shell: pm2 startup
+      args:
+        chdir: ~/express/ip_app/
