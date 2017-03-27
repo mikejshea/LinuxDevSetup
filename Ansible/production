@@ -7,3 +7,10 @@ ansible_ssh_pass=gpddev
 192.168.162.101
 192.168.162.102
 192.168.162.103
+
+[atlanta-appservers]
+192.168.162.201
+192.168.162.202
+
+[atlanta-loadbalancer]
+192.168.162.200

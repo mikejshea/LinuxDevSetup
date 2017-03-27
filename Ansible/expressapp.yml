@@ -1,0 +1,47 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-appservers
+  remote_user: root
+  tasks:
+    - name: make app folder
+      file:
+        path: ~/express/ip_app
+        state: directory
+
+    - name: npm init
+      shell: npm init --yes
+      args:
+        chdir: ~/express/ip_app/
+
+    - name: npm init
+      npm:
+        name: express
+        path: ~/express/ip_app/
+
+    - name: copy app files
+      copy:
+        src: ./templates/app.js
+        dest: ~/express/ip_app/app.js
+        owner: root
+        mode: 0644
+
+    - name: copy nginx config
+      copy:
+        src: ./templates/nginx_rev_proxy.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        mode: 0644
+
+    - name: restart nginx service
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
+
+    - name: start nodejs
+      shell: node app.js
+      args:
+        chdir: ~/express/ip_app/
+      async: 1
+      poll: 0

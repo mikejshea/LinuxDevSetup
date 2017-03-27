@@ -1,0 +1,18 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-appservers:atlanta-loadbalancer
+  remote_user: root
+  tasks:
+
+    - name: Add nginx repos
+      copy:
+        src: ./templates/nginx.repo
+        dest: /etc/yum.repos.d/nginx.repo
+        owner: root
+        mode: 0644
+
+    - name: Install nginx
+      yum:
+        name: nginx
+        state: latest

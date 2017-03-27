@@ -1,0 +1,37 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-appservers:atlanta-loadbalancer
+  remote_user: root
+  tasks:
+    - name: Upgrade all packages
+      yum: name=* state=latest
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Open port 80
+      firewalld:
+        zone: public
+        port: 80/tcp
+        permanent: true
+        state: enabled
+
+    - name: Install policycoreutils-python
+      yum:
+        name: policycoreutils-python
+        state: latest
+
+    - name: Create db path
+      file:
+        path: /data/nodejs/
+        state: directory
+
+    - name: Reboot server
+      shell: shutdown -r +1
+      async: 0
+      poll: 0
+
+    - name: Wait for server to return
+      local_action: wait_for host={{ ansible_ssh_host }} state=started

@@ -1,0 +1,27 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-appservers
+  remote_user: root
+  tasks:
+
+    - name: Download nodejs
+      get_url:
+        url: https://rpm.nodesource.com/setup_7.x
+        dest: ~/nodejs.sh
+        owner: root
+        mode: 0755
+
+    - name: run nodejs bash script
+      shell: ~/nodejs.sh >> ~/nodejs.log
+
+    - name: run nodejs install
+      yum:
+        name: nodejs
+        state: latest
+
+    - name: run pm2 npm install
+      npm:
+        name: pm2
+        version: latest
+        global: yes

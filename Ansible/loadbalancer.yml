@@ -1,0 +1,19 @@
+---
+# The playbook sets up a server for mongodb install
+
+- hosts: atlanta-loadbalancer
+  remote_user: root
+  tasks:
+
+    - name: copy nginx config
+      copy:
+        src: ./templates/nginx_lb.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        mode: 0644
+
+    - name: restart nginx service
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
