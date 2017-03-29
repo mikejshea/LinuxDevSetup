@@ -18,11 +18,11 @@ app.get('/', function (req, res) {
 
       if (alias >= 1) {
         // this single interface has multiple ipv4 addresses
-        console.log('1:' + ifname + ':' + alias, iface.address);
+        //console.log('1:' + ifname + ':' + alias, iface.address);
         res.status(200).send(ifname + ':' + alias, iface.address);
       } else {
         // this interface has only one ipv4 adress
-        console.log('2:' + ifname, iface.address);
+        //console.log('2:' + ifname, iface.address);
         res.status(200).send('{ifname:"' + ifname + '", addr:"' + iface.address + '", PID: "' + process.pid + '"}');
       }
       ++alias;

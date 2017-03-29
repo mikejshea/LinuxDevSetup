@@ -1,0 +1,6 @@
+#Ansible retries
+*.retry
+
+*.tmp
+
+
