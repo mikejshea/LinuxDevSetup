@@ -1,101 +1,153 @@
 #! /bin/bash
+
+
+readonly GOGLAND_INSTALLER=https://download-cf.jetbrains.com/go/gogland-163.12024.32.tar.gz
+readonly ATOM_INSTALLER=https://atom.io/download/deb
+readonly INTELLIJ_INSTALLER=https://download-cf.jetbrains.com/idea/ideaIU-2016.3.5.tar.gz
+readonly WEBSTORM_INSTALLER=https://download-cf.jetbrains.com/webstorm/WebStorm-2016.3.4.tar.gz
+readonly PYCHARM_INSTALLER=https://download-cf.jetbrains.com/python/pycharm-professional-2016.3.2.tar.gz
+readonly ORACLE_JAVA_8_INSTALLER=http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jre-8u60-linux-x64.deb
+readonly ORACLE_JAVA_8_JDK_INSTALLER=http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.deb
+readonly SUBLIME_INSTALLER=https://download.sublimetext.com/sublime_text_3_build_3126_x64.tar.bz2
+readonly CHROME_INSTALLER=https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.deb
+
 if [ "root" != $USER ];
 then
     echo Must run setup at \'root\', please use \'sudo bash\'.
     exit
 fi
 
+if [ ! -z "$(which dialog)" ];
+then
+    echo "Dialog installed"
+else
+    apt-get -y install dialog
+fi
+
+# Package: Atom
+function CheckAtomVersion()
+{
+    if [ ! -z "$(which atom)" ];
+    then
+        echo "$(atom --version)"
+    else
+        echo "Not Installed"
+    fi
+}
+function InstallAtom {
+    wget $ATOM_INSTALLER
+    mv deb atom-amd64.deb
+    dpkg -i atom-amd64.deb
+    apt-get -f install -y
+    rm atom-amd64.deb
+}
+
+# Package: Git
 function CheckGitVersion()
 {
     if [ ! -z "$(which git)" ];
     then
         echo "$(git --version)"
-    else 
+    else
         echo "Not Installed"
     fi
-} 
+}
 
-function CheckAtomVersion()
+# Package: VMWare Tools
+function CheckVMWareToolsVersion()
 {
-    if [ ! -z "$(which atom)" ];
+    if [ ! -z "$(which vmware-toolbox-cmd)" ];
     then
-        echo "$(atom --version)"
-    else 
+        echo "$(vmware-toolbox-cmd -v)"
+    else
         echo "Not Installed"
     fi
-} 
-function CheckChromeVersion()
-{
-    if [ ! -z "$(which google-chrome)" ];
-    then
-        echo "$(google-chrome --version)"
-    else 
-        echo "Not Installed"
-    fi
-} 
+}
+
+function InstallVMWareTools {
+    echo Installing VMWare Tools
+    echo    Extracting VMware Tools
+    tar -xvzf /media/mshea/VMware\ Tools/VMwareTools-*.tar.gz -C /home/mshea/Downloads/
+
+    echo Installing VMWare Tools
+    /home/mshea/Downloads/vmware-tools-distrib/vmware-install.pl
+
+    echo clean up VMWare Folder
+    rm -rf /home/mshea/Downloads/vmware-tools-distrib
+}
+
+# Package: Terminator
 function CheckTerminatorVersion()
 {
     if [ ! -z "$(which terminator)" ];
     then
         echo "$(terminator -v 2> /dev/null)"
-    else 
+    else
         echo "Not Installed"
     fi
 }
 
-function CheckAtomVersion()
+# Package: Docker
+function CheckDockerVersion()
 {
-    if [ ! -z "$(which atom)" ];
+    if [ ! -z "$(which docker)" ];
     then
-        echo "$(atom --version)"
-    else 
+        echo "$(docker --version)"
+    else
         echo "Not Installed"
     fi
 }
+
+function InstallDocker {
+    # wget -qO- https://get.docker.com/ | sh
+    # result=$(tempfile) ; chmod go-rw $result
+    # whiptail --inputbox "What is your username?" 10 30 2>$result
+    # usermod -aG docker $(cat $result)
+    apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt-get update
+    apt-get install -y docker-ce
+}
+
+function CheckChromeVersion()
+{
+    if [ ! -z "$(which google-chrome)" ];
+    then
+        echo "$(google-chrome --version)"
+    else
+        echo "Not Installed"
+    fi
+}
+
+
 
 function CheckNodeJSVersion()
 {
     if [ ! -z "$(which nodejs)" ];
     then
         echo "$(nodejs --version)"
-    else 
+    else
         echo "Not Installed"
     fi
 }
 
-function CheckDockerVersion()
-{
-    if [ ! -z "$(which docker)" ];
-    then
-        echo "$(docker --version)"
-    else 
-        echo "Not Installed"
-    fi
-}
 function CheckSublimeVersion()
 {
     if [ ! -z "$(which /opt/sublime_text/sublime_text)" ];
     then
         echo "$(/opt/sublime_text/sublime_text --version)"
-    else 
+    else
         echo "Not Installed"
     fi
 }
-function CheckVMWareToolsVersion()
-{
-    if [ ! -z "$(which vmware-toolbox-cmd)" ];
-    then
-        echo "$(vmware-toolbox-cmd -v)"
-    else 
-        echo "Not Installed"
-    fi
-}
+
 function CheckEclipseVersion()
 {
     if [ ! -z "$(which eclipse)" ];
     then
         echo "Installed"
-    else 
+    else
         echo "Not Installed"
     fi
 }
@@ -105,7 +157,7 @@ function CheckWebstormVersion()
     if [ ! -z "$(which webstorm)" ];
     then
         echo "Installed"
-    else 
+    else
         echo "Not Installed"
     fi
 }
@@ -114,7 +166,7 @@ function CheckOpenVPNVersion()
     if [ ! -z "$(which webstorm)" ];
     then
         echo "Installed"
-    else 
+    else
         echo "Not Installed"
     fi
 }
@@ -124,18 +176,6 @@ function InstallUpdates {
     apt-get update
     apt-get upgrade -y
     echo Finished Updates
-}
-
-function InstallVMWareTools {
-    echo Installing VMWare Tools
-    echo    Extracting VMware Tools
-    tar -xvzf /media/mshea/VMware\ Tools/VMwareTools-9.9.3-2759765.tar.gz -C /home/mshea/Downloads/
-
-    echo Installing VMWare Tools
-    /home/mshea/Downloads/vmware-tools-distrib/vmware-install.pl -d
-
-    echo clean up VMWare Folder
-    rm -rf /home/mshea/Downloads/vmware-tools-distrib
 }
 
 function InstallChrome {
@@ -170,7 +210,7 @@ function InstallOpenVPN()
 {
     apt-get install -y openvpn
     apt-get install -y network-manager-openvpn
-    restart network-manager 
+    restart network-manager
 }
 function InstallSublime {
     wget http://c758482.r82.cf2.rackcdn.com/sublime-text_build-3083_amd64.deb
@@ -179,13 +219,7 @@ function InstallSublime {
     rm sublime-text_build-3083_amd64.deb
 }
 
-function InstallAtom {
-    wget https://atom.io/download/deb
-    mv deb atom-amd64.deb
-    dpkg -i atom-amd64.deb
-    apt-get -f install -y
-    rm atom-amd64.deb
-}
+
 
 function InstallOracleJava8 {
     echo debconf shared/accepted-oracle-license-v1-1 select true | \
@@ -197,12 +231,6 @@ function InstallOracleJava8 {
     apt-get install -y oracle-java8-installer
 }
 
-function InstallDocker {
-    wget -qO- https://get.docker.com/ | sh
-    result=$(tempfile) ; chmod go-rw $result
-    whiptail --inputbox "What is your username?" 10 30 2>$result
-    usermod -aG docker $(cat $result)
-}
 
 function InstallWebStorm {
     wget http://download-cf.jetbrains.com/webstorm/WebStorm-10.0.4.tar.gz
@@ -266,7 +294,7 @@ do
     case $choice in
         "General_Updates")
             echo "X-General Updates"
-            InstallUpdates 
+            InstallUpdates
             ;;
         "VMWare_Tools")
             echo "X-VMWare Tools"
@@ -337,4 +365,3 @@ echo Finished!
 #  255)
 #    echo "ESC pressed.";;
 #esac
-
